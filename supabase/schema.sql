@@ -48,7 +48,9 @@ CREATE TABLE IF NOT EXISTS documents (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   file_name TEXT NOT NULL,
+  original_name TEXT NOT NULL,
   file_path TEXT NOT NULL,
+  file_size INTEGER,
   file_type TEXT NOT NULL CHECK (file_type IN ('resume', 'cv', 'narrative', 'other')),
   extracted_text TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -233,3 +235,34 @@ CREATE TRIGGER update_applications_updated_at
 CREATE TRIGGER update_analysis_runs_updated_at
   BEFORE UPDATE ON analysis_runs
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- -----------------------------------------------------------------------------
+-- 8. Storage bucket for documents
+-- -----------------------------------------------------------------------------
+-- Run this in Supabase Dashboard > Storage or via SQL Editor:
+--
+-- INSERT INTO storage.buckets (id, name, public)
+-- VALUES ('interview-docs', 'interview-docs', false);
+--
+-- Storage RLS policies (run in SQL Editor):
+--
+-- CREATE POLICY "Users can upload own documents"
+--   ON storage.objects FOR INSERT
+--   WITH CHECK (
+--     bucket_id = 'interview-docs'
+--     AND auth.uid()::text = (storage.foldername(name))[1]
+--   );
+--
+-- CREATE POLICY "Users can view own documents"
+--   ON storage.objects FOR SELECT
+--   USING (
+--     bucket_id = 'interview-docs'
+--     AND auth.uid()::text = (storage.foldername(name))[1]
+--   );
+--
+-- CREATE POLICY "Users can delete own documents"
+--   ON storage.objects FOR DELETE
+--   USING (
+--     bucket_id = 'interview-docs'
+--     AND auth.uid()::text = (storage.foldername(name))[1]
+--   );

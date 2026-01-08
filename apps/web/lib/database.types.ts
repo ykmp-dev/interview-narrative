@@ -63,7 +63,9 @@ export type Database = {
           id: string;
           user_id: string;
           file_name: string;
+          original_name: string;
           file_path: string;
+          file_size: number | null;
           file_type: "resume" | "cv" | "narrative" | "other";
           extracted_text: string | null;
           created_at: string;
@@ -73,7 +75,9 @@ export type Database = {
           id?: string;
           user_id: string;
           file_name: string;
+          original_name: string;
           file_path: string;
+          file_size?: number | null;
           file_type: "resume" | "cv" | "narrative" | "other";
           extracted_text?: string | null;
           created_at?: string;
@@ -83,7 +87,9 @@ export type Database = {
           id?: string;
           user_id?: string;
           file_name?: string;
+          original_name?: string;
           file_path?: string;
+          file_size?: number | null;
           file_type?: "resume" | "cv" | "narrative" | "other";
           extracted_text?: string | null;
           created_at?: string;
