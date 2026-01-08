@@ -1,7 +1,11 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import type { Application, Document } from "@/lib/database.types";
+import type {
+  Application,
+  Document,
+  JobPosting,
+} from "@/lib/database.types";
 
 // Extended type for document with file metadata
 export type DocumentWithMeta = Document;
@@ -29,6 +33,55 @@ export async function getApplication(id: string): Promise<Application | null> {
   }
 
   return data as Application;
+}
+
+export type ApplicationWithJobPosting = Application & {
+  job_posting: JobPosting;
+};
+
+export async function getApplicationWithJobPosting(
+  id: string
+): Promise<ApplicationWithJobPosting | null> {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return null;
+  }
+
+  // Get application
+  const { data: appData, error: appError } = await supabase
+    .from("applications")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (appError || !appData) {
+    console.error("Error fetching application:", appError);
+    return null;
+  }
+
+  const app = appData as Application;
+
+  // Get job posting
+  const { data: jobPosting, error: jpError } = await supabase
+    .from("job_postings")
+    .select("*")
+    .eq("id", app.job_posting_id)
+    .single();
+
+  if (jpError || !jobPosting) {
+    console.error("Error fetching job posting:", jpError);
+    return null;
+  }
+
+  return {
+    ...app,
+    job_posting: jobPosting as JobPosting,
+  };
 }
 
 export async function getApplicationDocuments(
