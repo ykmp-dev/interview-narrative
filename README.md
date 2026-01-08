@@ -82,6 +82,49 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
 **保護ルートの確認:**
 - 未ログイン状態で http://localhost:3000/dashboard にアクセスすると、/auth/sign-in へリダイレクトされる
 
+## データベーススキーマ
+
+### テーブル構成
+
+| テーブル | 目的 |
+|---------|------|
+| `job_postings` | 求人票（JD）情報 |
+| `documents` | アップロードされたPDF（履歴書、職務経歴書など） |
+| `applications` | 応募案件（求人と候補者資料の紐付け） |
+| `analysis_runs` | AI分析の実行結果（マトリクス、Q&Aなど） |
+| `application_documents` | 応募案件とドキュメントの中間テーブル |
+
+### スキーマの反映方法
+
+1. Supabase コンソールの SQL Editor を開く
+2. `supabase/schema.sql` の内容をコピー＆ペースト
+3. Run をクリックして実行
+
+または Supabase CLI を使用:
+
+```bash
+# Supabase CLI をインストール
+npm install -g supabase
+
+# プロジェクトにリンク
+supabase link --project-ref YOUR_PROJECT_REF
+
+# マイグレーションを実行
+supabase db push
+```
+
+### 型定義の再生成
+
+Supabase CLI を使って型定義を自動生成できます:
+
+```bash
+# プロジェクトIDを指定して生成
+npx supabase gen types typescript --project-id YOUR_PROJECT_ID > apps/web/lib/database.types.ts
+
+# またはリンク済みプロジェクトから生成
+npx supabase gen types typescript --linked > apps/web/lib/database.types.ts
+```
+
 ## 開発ルール
 
 詳細は [claude.md](./claude.md) を参照してください。
