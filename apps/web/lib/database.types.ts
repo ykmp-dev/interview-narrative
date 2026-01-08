@@ -28,6 +28,7 @@ export type Database = {
           description: string | null;
           requirements: string | null;
           raw_text: string | null;
+          source_url: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -39,6 +40,7 @@ export type Database = {
           description?: string | null;
           requirements?: string | null;
           raw_text?: string | null;
+          source_url?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -50,9 +52,11 @@ export type Database = {
           description?: string | null;
           requirements?: string | null;
           raw_text?: string | null;
+          source_url?: string | null;
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       documents: {
         Row: {
@@ -85,6 +89,7 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       applications: {
         Row: {
@@ -114,6 +119,7 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       analysis_runs: {
         Row: {
@@ -158,6 +164,7 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       application_documents: {
         Row: {
@@ -178,6 +185,7 @@ export type Database = {
           document_id?: string;
           created_at?: string;
         };
+        Relationships: [];
       };
     };
     Views: Record<string, never>;

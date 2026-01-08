@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS job_postings (
   description TEXT,
   requirements TEXT,
   raw_text TEXT,
+  source_url TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );

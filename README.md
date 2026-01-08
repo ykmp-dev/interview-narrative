@@ -125,6 +125,24 @@ npx supabase gen types typescript --project-id YOUR_PROJECT_ID > apps/web/lib/da
 npx supabase gen types typescript --linked > apps/web/lib/database.types.ts
 ```
 
+## Job Posting 機能の動作確認
+
+1. サインイン済みの状態で http://localhost:3000/job-postings にアクセス
+
+2. 「+ New Job Posting」ボタンをクリック
+
+3. フォームに入力:
+   - Job Title: 例）Senior Software Engineer
+   - Company Name: 例）Acme Inc.
+   - Source URL: 例）https://example.com/job/123（任意）
+   - Job Description: 求人票の全文を貼り付け
+
+4. 「Save Job Posting」をクリック → 詳細ページへリダイレクト
+
+5. 一覧ページ（/job-postings）で保存した求人票が表示されることを確認
+
+6. 詳細ページで「Delete」ボタンをクリックすると削除される
+
 ## 開発ルール
 
 詳細は [claude.md](./claude.md) を参照してください。
