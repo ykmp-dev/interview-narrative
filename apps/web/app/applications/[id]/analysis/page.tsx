@@ -5,8 +5,7 @@ import {
   getApplicationWithJobPosting,
   getApplicationDocuments,
 } from "../../actions";
-import { generateMockRequirements } from "@/lib/analysis/mockGenerator";
-import RequirementsMatrix from "./requirements-matrix";
+import AnalysisClient from "./analysis-client";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -33,9 +32,7 @@ export default async function AnalysisPage({ params }: Props) {
 
   const documents = await getApplicationDocuments(id);
 
-  // Generate mock requirements from JD text
   const jdText = application.job_posting.raw_text || "";
-  const matrix = generateMockRequirements(jdText);
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-black">
@@ -59,30 +56,13 @@ export default async function AnalysisPage({ params }: Props) {
 
       <main className="mx-auto max-w-6xl px-6 py-8">
         <div className="space-y-6">
-          {/* Status Banner */}
-          <div className="rounded-lg border border-yellow-200 bg-yellow-50 p-4 dark:border-yellow-900/50 dark:bg-yellow-900/20">
-            <div className="flex items-start gap-3">
-              <span className="text-yellow-600 dark:text-yellow-400">⚠️</span>
-              <div>
-                <h3 className="font-medium text-yellow-800 dark:text-yellow-200">
-                  Stub Mode - AI Analysis Pending
-                </h3>
-                <p className="mt-1 text-sm text-yellow-700 dark:text-yellow-300">
-                  This is a mock analysis. Requirements are extracted as stubs
-                  from the JD text. Claude API integration will provide
-                  intelligent analysis of requirements and evidence matching.
-                </p>
-              </div>
-            </div>
-          </div>
-
           {/* Document Status */}
           <div className="rounded-lg bg-white p-6 shadow-md dark:bg-zinc-900">
             <h2 className="mb-4 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
               Uploaded Documents
             </h2>
             {documents.length === 0 ? (
-              <div className="text-center py-4">
+              <div className="py-4 text-center">
                 <p className="text-zinc-500 dark:text-zinc-400">
                   No documents uploaded yet.
                 </p>
@@ -111,20 +91,15 @@ export default async function AnalysisPage({ params }: Props) {
                   ))}
                 </ul>
                 <p className="mt-3 text-xs text-zinc-500 dark:text-zinc-400">
-                  TODO: PDF text extraction will be implemented to match evidence
-                  against requirements.
+                  TODO: PDF text extraction will be implemented to match
+                  evidence against requirements.
                 </p>
               </div>
             )}
           </div>
 
-          {/* Requirements Matrix */}
-          <div className="rounded-lg bg-white p-6 shadow-md dark:bg-zinc-900">
-            <h2 className="mb-4 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-              JD Requirements × Evidence Matrix
-            </h2>
-            <RequirementsMatrix matrix={matrix} />
-          </div>
+          {/* Requirements Analysis - Client Component */}
+          <AnalysisClient jdText={jdText} />
         </div>
       </main>
     </div>
