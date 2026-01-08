@@ -49,6 +49,39 @@ pnpm -C apps/web build
 pnpm -C apps/web start
 ```
 
+## 環境変数
+
+`apps/web/.env.local` に以下を設定:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+```
+
+## 認証フローの動作確認
+
+1. 開発サーバーを起動:
+   ```bash
+   pnpm -C apps/web dev
+   ```
+
+2. ブラウザで http://localhost:3000/auth/sign-up にアクセス
+
+3. メールアドレスとパスワード（6文字以上）を入力してサインアップ
+
+4. Supabase の設定によっては確認メールが届くので、リンクをクリック
+
+5. http://localhost:3000/auth/sign-in でサインイン
+
+6. サインイン成功後、自動的に /dashboard へリダイレクト
+
+7. ダッシュボードでユーザー情報が表示されることを確認
+
+8. Sign Out ボタンでログアウト
+
+**保護ルートの確認:**
+- 未ログイン状態で http://localhost:3000/dashboard にアクセスすると、/auth/sign-in へリダイレクトされる
+
 ## 開発ルール
 
 詳細は [claude.md](./claude.md) を参照してください。
