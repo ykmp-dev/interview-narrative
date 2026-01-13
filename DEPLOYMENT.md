@@ -1,6 +1,96 @@
+# デプロイ手順
+
+このドキュメントでは、interview-narrative アプリケーションを各種プラットフォームにデプロイする手順を説明します。
+
+## 目次
+
+- [GitHub Pages デプロイ](#github-pages-デプロイ)
+- [VPS デプロイ](#vps-デプロイ手順)
+
+---
+
+# GitHub Pages デプロイ
+
+GitHub Pages を使用して静的サイトとして公開する方法です。
+
+## 重要な制限事項
+
+GitHub Pages は**静的サイトのみ**をサポートするため、以下の機能は使用できません：
+
+- ❌ API Routes (`/api/*`)
+- ❌ Server-Side Rendering (SSR)
+- ❌ Server Actions
+- ❌ Dynamic Routes（一部制限あり）
+- ❌ Image Optimization
+
+このため、GitHub Pages デプロイは**デモやドキュメント用途**に適しています。完全な機能を使用する場合は、Vercel、Netlify、または VPS デプロイを推奨します。
+
+## デプロイ手順
+
+### 1. リポジトリの GitHub Pages 設定
+
+1. GitHub リポジトリの **Settings** > **Pages** に移動
+2. **Source** で「GitHub Actions」を選択
+3. 保存
+
+### 2. Secrets の設定
+
+GitHub リポジトリの **Settings** > **Secrets and variables** > **Actions** で以下を追加：
+
+- `NEXT_PUBLIC_SUPABASE_URL`: Supabase プロジェクト URL
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Supabase 匿名キー
+
+### 3. basePath の設定（リポジトリ名でサブパスになる場合）
+
+リポジトリが `https://username.github.io/repo-name/` 形式でホストされる場合、環境変数を追加：
+
+```bash
+# GitHub Secrets に追加
+NEXT_PUBLIC_BASE_PATH=/repo-name
+```
+
+※ユーザー/組織のメインサイト（`https://username.github.io/`）の場合は不要です。
+
+### 4. デプロイの実行
+
+main ブランチにプッシュすると、GitHub Actions が自動的に：
+
+1. Next.js アプリをビルド
+2. 静的ファイルにエクスポート
+3. GitHub Pages にデプロイ
+
+デプロイ状況は **Actions** タブで確認できます。
+
+### 5. 手動デプロイ
+
+GitHub の **Actions** タブから「Deploy to GitHub Pages」ワークフローを手動実行することもできます。
+
+## ローカルでの静的エクスポート確認
+
+```bash
+# ビルドとエクスポート
+pnpm -C apps/web build
+
+# 静的ファイルは apps/web/out/ に生成される
+ls apps/web/out/
+
+# ローカルサーバーで確認
+npx serve apps/web/out
+```
+
+## 代替デプロイオプション
+
+完全な機能を利用する場合は、以下のプラットフォームを推奨します：
+
+- **Vercel**: Next.js の公式ホスティング（推奨）
+- **Netlify**: 簡単なデプロイとCI/CD
+- **VPS**: 完全なコントロール（下記参照）
+
+---
+
 # VPS デプロイ手順
 
-このドキュメントでは、interview-narrative アプリケーションを VPS (Linux) にデプロイする手順を説明します。
+interview-narrative アプリケーションを VPS (Linux) にデプロイする手順です。
 
 ## 前提条件
 
